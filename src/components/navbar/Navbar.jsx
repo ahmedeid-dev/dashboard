@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -12,14 +14,14 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import { MdLightMode , MdDarkMode  } from 'react-icons/md';
+import { MdLightMode, MdDarkMode } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import { IoMdMenu } from 'react-icons/io';
 
-
-export default function Navbar() {
+export default function Navbar({ dirs, toggleSidebar, isSidebarCollapsed, darkState, toggleTheme }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [lang, setLang] = React.useState('en');
-    const [theme, setTheme] = React.useState('light');
+    // const [theme, setTheme] = React.useState('light');
     const [dir, setDir] = React.useState('ltr');
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -29,23 +31,17 @@ export default function Navbar() {
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
+
     const handleLanguage = () => {
-        if (lang === 'en') {
-            setLang('ar');
-            setDir('rtl');
-        } else {
-            setLang('en');
-            setDir('ltr');
-        }
+        setLang(lang === 'en' ? 'ar' : 'en');
+        setDir(dir === dirs ? 'rtl' : 'ltr');
+        alert(dirs)
     };
 
     const handleTheme = () => {
-        if (theme === 'light') {
-            setTheme('dark');
-        } else {
-            setTheme('light');
-        }
-    }
+        const res = toggleTheme()
+        // setTheme(theme === darkState ? 'dark' : 'light');
+    };
 
     const handleMobileMenuClose = () => {
         setMobileMoreAnchorEl(null);
@@ -64,16 +60,10 @@ export default function Navbar() {
     const renderMenu = (
         <Menu
             anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             id={menuId}
             keepMounted
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
@@ -86,16 +76,10 @@ export default function Navbar() {
     const renderMobileMenu = (
         <Menu
             anchorEl={mobileMoreAnchorEl}
-            anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             id={mobileMenuId}
             keepMounted
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
@@ -108,11 +92,7 @@ export default function Navbar() {
                 <p>Messages</p>
             </MenuItem>
             <MenuItem>
-                <IconButton
-                    size="large"
-                    aria-label="show 17 new notifications"
-                    color="inherit"
-                >
+                <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
                     <Badge badgeContent={17} color="error">
                         <NotificationsIcon />
                     </Badge>
@@ -120,13 +100,7 @@ export default function Navbar() {
                 <p>Notifications</p>
             </MenuItem>
             <MenuItem onClick={handleProfileMenuOpen}>
-                <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="primary-search-account-menu"
-                    aria-haspopup="true"
-                    color="inherit"
-                >
+                <IconButton size="large" aria-label="account of current user" aria-controls={menuId} aria-haspopup="true" color="inherit">
                     <AccountCircle />
                 </IconButton>
                 <p>Profile</p>
@@ -136,65 +110,31 @@ export default function Navbar() {
 
     return (
         <Box dir={dir} sx={{ flexGrow: 1 }}>
-            <AppBar sx={{ backgroundColor: '#09c' }} position="static">
+            <AppBar sx={{ backgroundColor: '#09c' }} position="fixed">
                 <Toolbar>
-                    {/* <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="open drawer"
-                        sx={{ mr: 2 }}
-                        onClick={(e)=>handleMenuOpen(e)}
-                    >
-                        <MenuIcon />
-                    </IconButton> */}
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' } }}
-                    >
-                        <Link to="/">Dashboard</Link>
-                    </Typography>
+                    <Box className=' flex items-center justify-center gap-2 absolute start-3'>
+                        <IconButton onClick={toggleSidebar} size="large" aria-label="toggle sidebar" color="inherit">
+                            <IoMdMenu />
+                        </IconButton>
+                        <Typography variant="h6" noWrap component="div" sx={{ display: { sm: 'block' } }}>
+                            <Link to="/">Dashboard</Link>
+                        </Typography>
+                    </Box>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <IconButton
-                            onClick={handleLanguage}
-                            size="large"
-                            aria-label="show 4 new mails"
-                            color="inherit">
+                        <IconButton onClick={handleLanguage} size="large" color="inherit">
                             <LanguageIcon />
                             <Badge badgeContent={lang} color="error"></Badge>
                         </IconButton>
-                        <IconButton
-                            onClick={handleTheme}
-                            size="large"
-                            aria-label="show 17 new notifications"
-                            color="inherit"
-                        >
-                            {theme === 'light' ? <MdDarkMode  /> : <MdLightMode  />}
+                        <IconButton onClick={handleTheme} size="large" color="inherit">
+                            {darkState == 'light' ? <MdDarkMode /> : <MdLightMode />}
                         </IconButton>
-                        <IconButton
-                            size="large"
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-controls={menuId}
-                            aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
-                            color="inherit"
-                        >
+                        <IconButton size="large" edge="end" aria-label="account of current user" aria-controls={menuId} aria-haspopup="true" onClick={handleProfileMenuOpen} color="inherit">
                             <AccountCircle />
                         </IconButton>
                     </Box>
                     <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-                        <IconButton
-                            size="large"
-                            aria-label="show more"
-                            aria-controls={mobileMenuId}
-                            aria-haspopup="true"
-                            onClick={handleMobileMenuOpen}
-                            color="inherit"
-                        >
+                        <IconButton size="large" aria-label="show more" aria-controls={mobileMenuId} aria-haspopup="true" onClick={handleMobileMenuOpen} color="inherit">
                             <MoreIcon />
                         </IconButton>
                     </Box>

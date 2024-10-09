@@ -1,94 +1,108 @@
-import { useMemo } from "react";
+/* eslint-disable react/prop-types */
+import { useMemo, useState } from "react";
 import { MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import DeleteDialog from "../delete/DeleteDialog";
+import DisableDialog from "../disable/DisableDialog";
+import ScrollDialog from "../Dialog/Dialog";
 
-// Example data type
-const data = [
-    {
-        name: {
-            firstName: "John",
-            lastName: "Doe",
-        },
-        address: "261 Erdman Ford",
-        city: "East Daphne",
-        state: "Kentucky",
-    },
-    {
-        name: {
-            firstName: "Jane",
-            lastName: "Doe",
-        },
-        address: "769 Dominic Grove",
-        city: "Columbus",
-        state: "Ohio",
-    },
-    {
-        name: {
-            firstName: "Joe",
-            lastName: "Doe",
-        },
-        address: "566 Brakus Inlet",
-        city: "South Linda",
-        state: "West Virginia",
-    },
-    {
-        name: {
-            firstName: "Kevin",
-            lastName: "Vandy",
-        },
-        address: "722 Emie Stream",
-        city: "Lincoln",
-        state: "Nebraska",
-    },
-    {
-        name: {
-            firstName: "Joshua",
-            lastName: "Rolluffs",
-        },
-        address: "32188 Larkin Turnpike",
-        city: "Omaha",
-        state: "Nebraska",
-    },
-];
+const Table = ({ columns, data, enableActions = false }) => {
+    const [editDialogData, setEditDialogData] = useState(null);
+    const [deleteDialogId, setDeleteDialogId] = useState(null);
+    const [disableDialogId, setDisableDialogId] = useState(null); // State for disable dialog
 
-const Example = () => {
-    // Memoized columns definition
-    const columns = useMemo(
-        () => [
-            {
-                accessorKey: "name.firstName", // Access nested data with dot notation
-                header: "First Name",
-                size: 150,
-            },
-            {
-                accessorKey: "name.lastName",
-                header: "Last Name",
-                size: 150,
-            },
-            {
-                accessorKey: "address", // Normal accessorKey
-                header: "Address",
-                size: 200,
-            },
-            {
-                accessorKey: "city",
-                header: "City",
-                size: 150,
-            },
-            {
-                accessorKey: "state",
-                header: "State",
-                size: 150,
-            },
-        ],
-        []
-    );
+    const memoizedColumns = useMemo(() => {
+        const baseColumns = columns.map(column => ({
+            ...column,
+            size: column.size || 150 // Default size if not provided
+        }));
+
+        if (enableActions) {
+            baseColumns.push({
+                id: "actions",
+                header: "Actions",
+                size: 100,
+                Cell: ({ row }) => (
+                    <div className="flex gap-2">
+                        <ScrollDialog
+                            label='Edit'
+                            action="edit"
+                            icon="FaPlus"
+                            onClick={() => openEditDialog(row.original)}
+                        />
+                        <DeleteDialog
+                        name="Delete"
+                            id={row.original.id ||5} // Assuming each row has an 'id' field
+                            onConfirm={() => handleDelete(row.original.id)} // Pass id to delete function
+                        />
+                        <DisableDialog
+                            id={row.original.id ||5} // Assuming each row has an 'id' field
+                            isEnabled={false}
+                            name='Disable'
+                            onConfirm={() => handleDisable(row.original.id)} // Pass id to delete function
+                        />
+                    </div>
+                ),
+            });
+        }
+
+        return baseColumns;
+    }, [columns, enableActions]);
 
     const table = useMaterialReactTable({
-        columns,
-        data, // Data must be memoized or stable
+        columns: memoizedColumns,
+        data,
     });
 
-    return <MaterialReactTable table={table} />;
+    const openEditDialog = (rowData) => {
+        setEditDialogData(rowData);
+    };
+
+    // eslint-disable-next-line no-unused-vars
+    const handleEdit = (rowData) => {
+        console.log("Edit", rowData);
+    };
+
+    const handleDelete = (id) => {
+        console.log("Delete ID:", id);
+        setDeleteDialogId(null);
+    };
+
+    const handleDisable = (id) => {
+        console.log("Disable ID:", id); // Log the ID to the console
+        setDisableDialogId(null);
+    };
+
+    return (
+        <>
+            <MaterialReactTable table={table} />
+            {editDialogData && (
+                <ScrollDialog
+                    label='Edit'
+                    action="edit"
+                    rowData={editDialogData}
+                    onClose={() => setEditDialogData(null)}
+                />
+            )}
+            {deleteDialogId && (
+                <DeleteDialog
+                    name='ahmed'
+                    label='Delete'
+                    id={deleteDialogId}
+                    onConfirm={handleDelete}
+                    onClose={() => setDeleteDialogId(null)}
+                />
+            )}
+            {disableDialogId && (
+                <DisableDialog
+                    name='ahmed'
+                    label='Disable'
+                    id={disableDialogId}
+                    onConfirm={handleDisable}
+                    onClose={() => setDisableDialogId(null)}
+                />
+            )}
+        </>
+    );
 };
 
-export default Example;
+export default Table;

@@ -2,32 +2,29 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-export default function SideLink({ label, linkTo, icon, className }) {
+export default function SideLink({ label, linkTo, icon, className, isActive, onClick }) {
   const location = useLocation();
   const [currentURL, setCurrentURL] = useState("");
+
   useEffect(() => {
     setCurrentURL(location.pathname);
   }, [location]);
 
   return (
-    <div className="h-[60px] flex flex-row">
+    <div className="h-[60px] flex flex-row" onClick={onClick}> {/* إضافة onClick هنا */}
       {linkTo === currentURL && (
-        <div className="h-[100%] w-[7px] rounded-l-lg bg-mainColor ms-1"></div>
+        <div className="h-[100%] w-[7px] rounded-l-lg  bg-blue-500"></div>
       )}
       <Link
-        to={linkTo}
-        className={`flex ${className} 
-        } justify-start h-[60px] gap-4 text-black 
-        ${linkTo === currentURL
-            ? "text-mainColor p-1 rounded-md"
-            : "bg-transparent hover:text-mainColor rounded-sm"
-          }`}
+        to={linkTo}   
+        className={`flex ${className} justify-start w-full rounded-e-none  h-[60px] gap-4 text-black 
+                ${linkTo === currentURL ? "text-blue-500 p-1 rounded-md" : "bg-transparent hover:text-blue-300 rounded-sm"}`}
       >
-        <div className="flex  my-auto">
-          <span className="flex items-center text-[25px] my-auto mx-4">
+        <div className="flex my-auto">
+          <span className="flex items-center text-[20px] my-auto mx-3" > {/* تغيير اللون حسب الحالة */}
             {icon}
           </span>
-          <span className="my-auto flex font-tajawal text-[18px] font-bold leading-6">{`${label}`}</span>
+          <span className="m-auto text-nowrap" >{`${label}`}</span>
         </div>
       </Link>
     </div>

@@ -1,7 +1,7 @@
 
 export default function Footer() {
   return <>
-    <div className="w-full p-3  text-white bg-[#09c]">
+    <div className="w-full p-3 fixed bottom-0 z-50  text-white bg-[#09c]">
       <div className=" flex  justify-center flex-row flex-wrap gap-5">
         <p >© copyright 2024</p>
         <p> All rights reserved</p>

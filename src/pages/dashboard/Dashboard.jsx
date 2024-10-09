@@ -3,7 +3,6 @@ import banner from "./../../assets/banner.png"
 import box from "./../../assets/6.png"
 import yarn from "./../../assets/9.png"
 import yarns from "./../../assets/8.png"
-import members from "./../../assets/7.png"
 import { Link } from "react-router-dom";
 
 export default function Dashboard() {
@@ -22,25 +21,6 @@ export default function Dashboard() {
                                 <p className="h3">عدد المنتجات</p>
                             </div>
                             <img src={box} alt="box" />
-                        </div>
-                        <div className="flex flex-row justify-center items-center gap-3  bg-[#9289AD] ">
-                            <IoIosArrowDropleftCircle    />
-                            <p>اقرا المزيد</p>
-                        </div>
-
-                    </div>
-                </div>
-                </Link>
-                
-                <Link to='/UserManagement'>
-                <div className="text-white w-[350px]   bg-gradient-to-r from-[#6E82B4] to-[#B78DAB] overflow-hidden  rounded-2xl">
-                    <div className="flex flex-col">
-                        <div className=" flex flex-row justify-between items-center p-5">
-                            <div className="flex flex-col">
-                                <p className="text-5xl">120</p>
-                                <p className="h3">الاعضاء </p>
-                            </div>
-                            <img src={members} alt="members" />
                         </div>
                         <div className="flex flex-row justify-center items-center gap-3  bg-[#9289AD] ">
                             <IoIosArrowDropleftCircle    />

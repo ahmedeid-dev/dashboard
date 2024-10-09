@@ -1,14 +1,19 @@
-import NavButtonWithLabel from "../../components/CircledNavButtonWithLabel/NavButtonWithLabel";
+
+import MainTable from '../../components/table/variables/Columns'
+import SimpleDialogDemo from './SubPage/UserDialog'
 
 export default function TailorManagement() {
     return <>
-        <div
-            className={`
-            flex flex-row flex-wrap
-            gap-4
-        `}>
-            <NavButtonWithLabel route="SupervisorPermissions" label="Supervisors' Permissions" />
-            <NavButtonWithLabel route="Supervisors" label="Supervisors" />
+        <div className="flex flex-col">
+            <div className="flex flex-row justify-between items-center">
+            <h1 className='text-4xl border-b-2 pb-2'>Tailor Management</h1>
+            <SimpleDialogDemo
+                label='Add'
+                action="add"
+            />
+            </div>
+
+            <MainTable />
         </div>
     </>
 }
