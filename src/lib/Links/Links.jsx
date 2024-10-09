@@ -1,23 +1,34 @@
-import { AiFillHome } from "react-icons/ai";
+import { AiFillHome, AiFillProduct } from "react-icons/ai";
 import { FaIdCard } from "react-icons/fa";
-import { TbBusStop } from "react-icons/tb";
+import { GiYarn } from "react-icons/gi";
+import { MdSupervisedUserCircle } from "react-icons/md";
 
 export const links = [
 
     {
         label: "Dashboard",
         icon: <AiFillHome />,
-        linkTo: "/dashboard"
+        linkTo: "/"
     },
     {
         label: "User Management",
         icon: <FaIdCard />,
-        linkTo: "/dashboard/UserManagement"
+        linkTo: "/UserManagement"
     },
     {
         label:"Product",
-        icon: <TbBusStop />,
-        linkTo: "/dashboard/ProductManagement"
+        icon: <AiFillProduct  />,
+        linkTo: "/ProductManagement"
+    },
+    {
+        label:"Tailors",
+        icon: <GiYarn  />,
+        linkTo: "/TailorManagement"
+    },
+    {
+        label:"Supervisors",
+        icon: <MdSupervisedUserCircle  />,
+        linkTo: "/SupervisorManagement"
     },
 ]
 
